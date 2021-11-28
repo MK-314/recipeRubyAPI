@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_24_074514) do
+ActiveRecord::Schema.define(version: 2021_11_28_073258) do
 
   create_table "favorites", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "user_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2021_11_24_074514) do
     t.text "directions"
     t.text "ingredients"
     t.bigint "user_id", null: false
+    t.integer "likes", default: 0
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 

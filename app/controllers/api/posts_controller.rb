@@ -52,7 +52,9 @@ module Api
 
     # DELETE /posts/1
     def destroy
-      @post.destroy
+      if @post.destroy
+        render json: { message: "success" }
+      end
     end
 
     private
@@ -64,7 +66,7 @@ module Api
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:name, :imageUrl, :directions, :ingredients, :user_id)
+      params.require(:post).permit(:name, :imageUrl, :directions, :ingredients, :user_id, :likes)
     end
   end
 end
