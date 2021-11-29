@@ -52,8 +52,14 @@ module Api
 
     # DELETE /posts/1
     def destroy
-      if @post.destroy
-        render json: { message: "success" }
+      if Favorite.where("post_id = ?", params[:id]).delete_all
+        if @post.destroy
+          render json: { message: "Success" }
+        else
+          render json: { error: "Errors while this post by ID" }
+        end
+      else
+        render json: { error: "Errors while deleting favorites" }
       end
     end
 
