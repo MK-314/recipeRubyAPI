@@ -21,7 +21,28 @@ module Api
 
     # GET /users/1
     def show
-      render json: @user
+      if params[:thisaction].present?
+        if params[:thisaction] == "getFollowers"
+          @result = User.find_by_sql(["SELECT * FROM users
+            WHERE id in 
+            (SELECT DISTINCT user_id FROM (
+            SELECT 
+            favorites.user_id,
+            favorites.post_id,
+            posts.name,
+            posts.directions,
+            posts.ingredients,
+            posts.imageUrl,
+            posts.user_id AS post_user_id,
+            posts.likes
+            from favorites
+            INNER JOIN posts ON posts.id = favorites.post_id
+            WHERE posts.user_id = ?) AS user_id)", params[:id]])
+          render json: @result
+        else
+          render json: @user
+        end
+      end
     end
 
     # POST /users

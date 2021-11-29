@@ -56,7 +56,7 @@ module Api
         if @post.destroy
           render json: { message: "Success" }
         else
-          render json: { error: "Errors while this post by ID" }
+          render json: { error: "Errors while deleting this post by ID" }
         end
       else
         render json: { error: "Errors while deleting favorites" }
