@@ -4,9 +4,25 @@ module Api
 
     # GET /posts
     def index
-      @posts = Post.all
-
-      render json: @posts
+      if params[:thisaction].present?
+        # [START] FIND BY USER ID
+        if params[:thisaction] == "getByUserId"
+          @post = Post.where("user_id = ?", params[:user_id])
+          render json: @post
+        end
+        # [END] FIND BY USER ID
+        # [START] COUNT POSTS BY USER ID
+        if params[:thisaction] == "countPostsByUserId"
+          @result = Post.where(user_id: params[:user_id]).count
+          render json: { postNumber: @result }
+        end
+        # [END] COUNT POSTS BY USER ID
+      else
+        # [START] GET ALL
+        @posts = Post.all
+        render json: @posts
+        # [END] GET ALL
+      end
     end
 
     # GET /posts/1
@@ -19,9 +35,9 @@ module Api
       @post = Post.new(post_params)
 
       if @post.save
-        render json: @post, status: :created, location: @post
+        render json: @post
       else
-        render json: @post.errors, status: :unprocessable_entity
+        render json: { error: "Errors while posting" }
       end
     end
 
@@ -30,7 +46,7 @@ module Api
       if @post.update(post_params)
         render json: @post
       else
-        render json: @post.errors, status: :unprocessable_entity
+        render json: { error: "Errors while posting" }
       end
     end
 
@@ -48,7 +64,7 @@ module Api
 
     # Only allow a list of trusted parameters through.
     def post_params
-      params.require(:post).permit(:name, :imageUrl, :directions, :ingredients)
+      params.require(:post).permit(:name, :imageUrl, :directions, :ingredients, :user_id)
     end
   end
 end
