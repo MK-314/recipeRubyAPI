@@ -39,9 +39,9 @@ module Api
             INNER JOIN posts ON posts.id = favorites.post_id
             WHERE posts.user_id = ?) AS user_id)", params[:id]])
           render json: @result
-        else
-          render json: @user
         end
+      else
+        render json: @user
       end
     end
 
